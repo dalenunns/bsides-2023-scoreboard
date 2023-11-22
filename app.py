@@ -1,5 +1,5 @@
 import flask
-from flask import send_file 
+from flask import send_file, request 
 from datetime import datetime
 from MessageAnnouncer import MessageAnnouncer
 
@@ -26,6 +26,17 @@ def control():
 @app.route('/ping')
 def ping():
     msg = format_sse(data=f'<b>Hello {datetime.now()} World</b>', event='message')
+    
+    announcer.announce(msg=msg)
+    return {}, 200
+
+@app.route('/message', methods=['POST'])
+def message():
+    print(request.form)
+    type_msg = f'<div id="element"></div><script>new TypeIt("#element", {{strings: "{request.form["message"]}",  speed: 75, loop: false, lifelike: true }}).go(); </script>'
+
+    msg = format_sse(data=type_msg, event='message')
+
     announcer.announce(msg=msg)
     return {}, 200
 

@@ -12,4 +12,12 @@
         
     </button>
     <div id="hack_reply"></div>
+
+
+    Message: <textarea name="message" type="text"></textarea>
+
+    <button hx-post="/message" hx-target="#message_reply" hx-include="[name='message']">
+        Send Message
+    </button>
+    <div id="message_reply"></div>
 </div>
