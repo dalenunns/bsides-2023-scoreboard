@@ -42,7 +42,8 @@ def message():
 
 @app.route('/hack')
 def hack():
-    msg = format_sse(data='<iframe width="420" height="315" src="https://www.youtube.com/embed/34CZjsEI1yU?autoplay=1&mute=1"></iframe>', event='message')
+    #msg = format_sse(data='<iframe width="420" height="315" src="https://www.youtube.com/embed/34CZjsEI1yU?autoplay=1&mute=1"></iframe>', event='message')
+    msg = format_sse(data='<video autoplay muted src="/static/JoltAd.mp4" type="video/mp4" width=100%></video>', event='scoreboard')
     announcer.announce(msg=msg)
     return {}, 200
 

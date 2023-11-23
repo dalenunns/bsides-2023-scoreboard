@@ -15,13 +15,23 @@
 
 <link rel="stylesheet" media="all" href="/static/style.css" />
 <div class="scanlines">
+    <div class="float">
+        <img src="/static/OTV.png"  width="100px"/>
+    </div>
+    
     <div hx-ext="sse" sse-connect="/listen">
         <div sse-swap="scoreboard">
-            <iframe id="ScoreBoardIframe" height=80% width=80% src="https://2023challenges.bsidescapetown.co.za/scoreboard?fullscreen=1"></iframe>
+            <iframe id="ScoreBoardIframe" height=80% width=100% src="https://2023challenges.bsidescapetown.co.za/scoreboard?fullscreen=1"></iframe>
         </div>
-        <div class="terminal">
-        <div sse-swap="message">            
+        <div class="terminal" height="200px">
+        <div sse-swap="message" height="200px">  
+            <p>
             Messages will go here!
+
+            Wooh
+        </p>  
+        <p>A </p>        
+        <p>A </p>        
         </div>
         </div>
     </div>

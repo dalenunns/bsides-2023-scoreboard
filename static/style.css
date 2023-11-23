@@ -24,6 +24,7 @@ keyframes :
     font-family: "VT323", monospace;
     text-transform: uppercase;
     color: #5bf870;
+    font-size: x-large;
 }
 
 /* REGULAR SCANLINES SETTINGS */
@@ -59,6 +60,12 @@ keyframes :
     background-size: 100% 4px;
     -webkit-animation: scanlines 1s steps(60) infinite;
             animation: scanlines 1s steps(60) infinite;
+  }
+
+  .float {
+    bottom:0; right:0;
+    z-index: 100;
+    position: absolute;
   }
   
   /* ANIMATE UNIQUE SCANLINE */
