@@ -1,17 +1,6 @@
 <script src="https://unpkg.com/htmx.org@1.9.9"></script>
 <script src="https://unpkg.com/htmx.org/dist/ext/sse.js"></script>
-<script src="https://unpkg.com/typeit@8.7.1/dist/index.umd.js"></script>
-
-
-<script>
-    window.setInterval("reloadScoreboardIFrame();", 300000);
-    
-    function reloadScoreboardIFrame() {
-     var frameHolder=document.getElementById('ScoreBoardIframe');
-    frameHolder.src="https://2023challenges.bsidescapetown.co.za/scoreboard?fullscreen=1"
-    }
-</script>
-    
+<script src="https://unpkg.com/typeit@8.7.1/dist/index.umd.js"></script> 
 
 <link rel="stylesheet" media="all" href="/static/style.css" />
 <div class="scanlines">
@@ -22,7 +11,7 @@
     
     <div hx-ext="sse" sse-connect="/listen">
         <div sse-swap="scoreboard">            
-            <iframe id="ScoreBoardIframe" height=100% width=100% src="https://2023challenges.bsidescapetown.co.za/scoreboard?fullscreen=1"></iframe>
+            <img src="/static/scoreboard.png" width="100%" height="100%"/>
         </div>
         <div sse-swap="message">
         </div>

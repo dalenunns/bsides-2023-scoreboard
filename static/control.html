@@ -1,25 +1,52 @@
-<script src="https://unpkg.com/htmx.org@1.9.9"></script>
-<link rel="stylesheet" media="all" href="/static/control.css" />
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>OTV - ARPS</title>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/purecss@3.0.0/build/pure-min.css" integrity="sha384-X38yfunGUhNzHpBaEBsWLO+A0HDYOQi8ufWDkZ0k9e0eXz/tH3II7uKZ9msv++Ls" crossorigin="anonymous">
+        <link rel="stylesheet" href="/static/control.css" />
+        <script src="https://unpkg.com/htmx.org@1.9.9"></script>
+    </head>
+    <body>
+        <div id="layout" class="content pure-g">
+            <div id="nav" class="pure-u">
+                <div class="nav-inner">
+                    <img src="/static/OTV.png" width="60px"/>
 
-
-<div>
-    <button hx-get="/ping" hx-target="#ping_reply">
-        Ping
+                    <div class="pure-menu">
+                        <ul class="pure-menu-list">
+                            <li class="pure-menu-item"><b>A</b>utomated</li>
+                            <li class="pure-menu-item"><b>R</b>ecord</li>
+                            <li class="pure-menu-item"><b>P</b>layback</li>
+                            <li class="pure-menu-item"><b>S</b>ystem</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
         
-    </button>
-    <div id="ping_reply"></div>
+            <div class="pure-u">
+                <div class="pure-menu">
+                <ul class="pure-menu-list">
+                    <li class="pure-menu-item">
+                        <button class="pure-button" hx-get="/test" hx-target="#test_reply">Test Pattern</button>
+                        <div id="test_reply"></div>
+                    </li>
+                    <li class="pure-menu-item">
+                        <button class="pure-button" hx-get="/hack" hx-target="#hack_reply">Hack</button>
+                        <div id="hack_reply"></div>
+                    </li> 
+                    <li class="pure-menu-item"></li>
+                        Message: <textarea name="message" type="text"></textarea>
 
-    <button hx-get="/hack" hx-target="#hack_reply">
-        Hack
-        
-    </button>
-    <div id="hack_reply"></div>
-
-
-    Message: <textarea name="message" type="text"></textarea>
-
-    <button hx-post="/message" hx-target="#message_reply" hx-include="[name='message']">
-        Send Message
-    </button>
-    <div id="message_reply"></div>
-</div>
+                        <button class="pure-button" hx-post="/message" hx-target="#message_reply" hx-include="[name='message']">
+                            Send Message
+                        </button>
+                        <div id="message_reply"></div>                    
+                    </li> 
+                </ul>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

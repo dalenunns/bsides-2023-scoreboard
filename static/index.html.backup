@@ -21,7 +21,7 @@
     </div>
     
     <div hx-ext="sse" sse-connect="/listen">
-        <div sse-swap="scoreboard">            
+        <div sse-swap="scoreboard">
             <iframe id="ScoreBoardIframe" height=100% width=100% src="https://2023challenges.bsidescapetown.co.za/scoreboard?fullscreen=1"></iframe>
         </div>
         <div sse-swap="message">
