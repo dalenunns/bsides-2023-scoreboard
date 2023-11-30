@@ -169,9 +169,11 @@ def listen():
 
 # Fetch screenshot of the scoreboard
 sched.add_job(update_scoreboard_task, 'interval', minutes=1)
-sched.add_job(show_sponsor_task, 'interval', minutes=3)
-sched.add_job(show_speaker_task, 'interval', minutes=2)
+sched.add_job(show_sponsor_task, 'interval', minutes=9)
+sched.add_job(show_speaker_task, 'interval', minutes=5)
+
+sched.start()
 
 if __name__ == '__main__':
-    sched.start()
+
     app.run(debug=True, use_reloader=False, host="192.168.1.22")

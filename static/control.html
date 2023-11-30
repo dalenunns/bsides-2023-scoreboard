@@ -2,9 +2,7 @@
 <html lang="en">
     <head>
         <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>OTV - ARPS</title>
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/purecss@3.0.0/build/pure-min.css" integrity="sha384-X38yfunGUhNzHpBaEBsWLO+A0HDYOQi8ufWDkZ0k9e0eXz/tH3II7uKZ9msv++Ls" crossorigin="anonymous">
         <link rel="stylesheet" href="/static/control.css" />
         <script src="https://unpkg.com/htmx.org@1.9.9"></script>
     </head>
@@ -29,17 +27,16 @@
                 <div class="pure-menu">
                 <ul class="pure-menu-list">
                     <li class="pure-menu-item">
-                        <button class="pure-button" hx-get="/test" hx-target="#test_reply">Test Pattern</button>
+                        Test Pattern
+                        <button class="pure-button" hx-get="/control/test-pattern?state=on" hx-target="#test_reply">On</button>
+                        <button class="pure-button" hx-get="/control/test-pattern?state=off" hx-target="#test_reply">Off</button>
                         <div id="test_reply"></div>
                     </li>
-                    <li class="pure-menu-item">
-                        <button class="pure-button" hx-get="/hack" hx-target="#hack_reply">Hack</button>
-                        <div id="hack_reply"></div>
-                    </li> 
                     <li class="pure-menu-item"></li>
-                        Message: <textarea name="message" type="text"></textarea>
+                        Message: 
+                        <textarea name="message" type="text"></textarea>
 
-                        <button class="pure-button" hx-post="/message" hx-target="#message_reply" hx-include="[name='message']">
+                        <button class="pure-button" hx-post="/control/message" hx-target="#message_reply" hx-include="[name='message']">
                             Send Message
                         </button>
                         <div id="message_reply"></div>                    
