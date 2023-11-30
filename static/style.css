@@ -64,7 +64,7 @@ keyframes :
 
   .float {
     bottom:0; right:0;
-    z-index: 100;
+    z-index: 1200;
     position: absolute;
     background-image: url("/static/OTV.png");
     width: 100px;
@@ -82,13 +82,16 @@ keyframes :
     position: absolute;
     background-color: rgba(0, 0, 0, 0.7);
   }
-  
+
+  #scoreboard {
+    z-index: 50;
+  }
 
   .message-overlay {
     top:0; left:0;
     width: 100%;
     height: 100%;
-    z-index: 90;
+    z-index: 1000;
     position: absolute;
     padding: 20px;
     background-color: rgba(0, 0, 0, 0.7);
