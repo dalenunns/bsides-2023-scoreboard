@@ -1,3 +1,4 @@
+<meta http-equiv="refresh" content="1800">
 <script src="https://unpkg.com/htmx.org@1.9.9"></script>
 <script src="https://unpkg.com/htmx.org/dist/ext/sse.js"></script>
 <script src="https://unpkg.com/typeit@8.7.1/dist/index.umd.js"></script> 
@@ -18,9 +19,11 @@
         <div id="scoreboard" sse-swap="png-scoreboard">            
             <img src="/scoreboardfetch?1" width="100%" height="100%"/>
         </div>
-        <div sse-swap="message">
+        <div id="message" sse-swap="message">
         </div>
         <div id="display-png" sse-swap="display">
+        </div>
+        <div id="schedule-container" sse-swap="schedule">
         </div>
     </div>   
 </div>

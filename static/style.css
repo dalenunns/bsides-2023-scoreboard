@@ -72,6 +72,7 @@ keyframes :
     background-repeat: no-repeat;
     background-size: contain;
     margin: 5px;
+    opacity: 0.25;
   }
 
  .video-overlay {
@@ -189,3 +190,63 @@ keyframes :
     text-shadow: 2px 2px 2px #333;
     overflow-x: scroll;
   }
+
+  .schedule {
+    width: 100%;
+    display: inline-flex;
+}
+
+
+.session-box {
+    font-family: "VT323", monospace;
+    color: #5bf870;
+
+    border-radius: 10px;
+    background: #24350d83;
+    padding: 5px;
+    width: 25%;
+    height: 80px;
+    margin: 5px;
+
+    display: flex;
+    justify-content: flex-end;
+    flex-direction: column
+}
+
+.session-box-mini {
+  font-family: "VT323", monospace;
+  color: #5bf870;
+  font-size: x-large;
+
+  border-radius: 10px;
+  background: #24350d83;
+  padding: 5px;
+  width: 50px;
+  height: 80px;
+  margin: 5px;
+
+
+}
+
+.session-box .title {
+    font-size: 1.4em;
+}
+
+.session-box .speaker {
+    font-size: 1.4em;
+}
+
+.session-box .time {
+    font-size: 1.4em;
+    margin-left: auto;
+    margin-top: auto;
+    margin-bottom: 0px;
+    float: right
+}
+
+.schedule-talks {
+  z-index: 55;
+  position: absolute;
+  bottom: 0;
+  left:0;
+}

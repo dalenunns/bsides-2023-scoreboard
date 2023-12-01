@@ -1,4 +1,4 @@
-#!/bin/python
+#!/usr/bin/python
 
 import flask
 import html
@@ -9,6 +9,7 @@ import os
 from flask import send_file, request 
 from datetime import datetime
 from MessageAnnouncer import MessageAnnouncer
+import Pretalix
 
 from apscheduler.schedulers.background import BackgroundScheduler
 from apscheduler.executors.pool import ThreadPoolExecutor, ProcessPoolExecutor
@@ -16,6 +17,7 @@ from apscheduler.executors.pool import ThreadPoolExecutor, ProcessPoolExecutor
 from flask_caching import Cache
 
 app = flask.Flask(__name__, static_url_path='/static')
+app.app_context().push()
 announcer = MessageAnnouncer()
 
 executors = {
@@ -23,7 +25,7 @@ executors = {
     'processpool': ProcessPoolExecutor(4)
 }
 
-sched = BackgroundScheduler(timezone='Asia/Seoul', executors=executors)
+sched = BackgroundScheduler(timezone='Africa/Johannesburg', executors=executors)
 
 app.config["SECRET_KEY"] = "blah"
 app.config["CACHE_TYPE"] = "FileSystemCache"
@@ -50,6 +52,8 @@ def update_scoreboard_task():
 # Show a Sponsor Image
 def show_sponsor_task():
     sponsor_image_idx = cache.get("sponsor_image_idx")
+    if sponsor_image_idx is None:
+        sponsor_image_idx = 0
     sponsor_image_idx += 1
     cache.set("sponsor_image_idx", sponsor_image_idx)
     displayimage(f'/sponsorfetch?{time.time()}', 30)
@@ -57,9 +61,14 @@ def show_sponsor_task():
 # Show a Speaker Image
 def show_speaker_task():
     speaker_image_idx = cache.get("speaker_image_idx")
+    if speaker_image_idx is None:
+        speaker_image_idx = 0
     speaker_image_idx += 1
     cache.set("speaker_image_idx", speaker_image_idx)
     displayimage(f'/speakerfetch?{time.time()}', 30)
+
+def show_schedule_task():
+    displaychedule()
 
 ###
 
@@ -114,7 +123,7 @@ def update_scoreboard():
 @app.route('/control/message', methods=['POST'])
 def message():
     message = ','.join(json.dumps(f'{x}') for x in request.form["message"].splitlines())
-    type_msg = f'<div id="element" class="message-overlay"></div><script>new TypeIt("#element", {{strings: [{message}],  speed: 100, html: false, loop: false, lifelike: true, afterComplete: () => setTimeout(function () {{document.getElementById("element").style.display = "none"}},10000) }}).go(); </script>'
+    type_msg = f'<div id="element" class="message-overlay"></div><script>new TypeIt("#element", {{strings: [{message}],  speed: 100, html: false, loop: false, lifelike: true, afterComplete: () => setTimeout(function () {{removeAllChildren(document.getElementById("message"))}},10000) }}).go(); </script>'
 
     msg = format_sse(data=type_msg, event='message')
 
@@ -145,7 +154,7 @@ def displayimage():
     return displayimage(image, timeout)
 
 def displayimage(imagePath, timeout):
-    image_style = f'<style> .display-image {{ top:0; left:0; z-index: 90; position: absolute; background-color: #FFFFFF; background-image: url("{imagePath}"); width: 100%; height: 100%; background-repeat: no-repeat; background-size: contain, cover; background-position: center;}} </style>'
+    image_style = f'<style> .display-image {{ top:0; left:0; z-index: 90; position: absolute; background-color: #000000; background-image: url("{imagePath}"); width: 100%; height: 100%; background-repeat: no-repeat; background-size: contain, cover; background-position: center;}} </style>'
     image_msg = '<div id="myImage" class="display-image" width="100%" height="100%"></div>'
     image_script = f'<script>setTimeout(function () {{removeAllChildren(document.getElementById("display-png"))}}, {timeout*1000})</script>'
     
@@ -153,7 +162,20 @@ def displayimage(imagePath, timeout):
     announcer.announce(msg=msg)
     return {}, 200
 
+@app.route('/control/schedule')
+def displaychedule():
+    with app.app_context():
+        schedule_html = flask.render_template('schedule.html', schedule = Pretalix.fetch_schedule_data())
+        schedule_html = schedule_html.replace('\n', '')
+        msg = format_sse(data=schedule_html, event='schedule')
+        announcer.announce(msg=msg)
+        return {}, 200
 
+
+@app.route('/schedule')
+def schedule():
+   
+    return flask.render_template('schedule.html', schedule = Pretalix.fetch_schedule_data())
 
 # Event Stream for the frontend
 @app.route('/listen', methods=['GET'])
@@ -169,11 +191,11 @@ def listen():
 
 # Fetch screenshot of the scoreboard
 sched.add_job(update_scoreboard_task, 'interval', minutes=1)
-sched.add_job(show_sponsor_task, 'interval', minutes=9)
-sched.add_job(show_speaker_task, 'interval', minutes=5)
+sched.add_job(show_sponsor_task, 'interval', minutes=3)
+sched.add_job(show_speaker_task, 'interval', minutes=2)
+sched.add_job(show_schedule_task, 'interval', minutes=1)
 
 sched.start()
 
 if __name__ == '__main__':
-
     app.run(debug=True, use_reloader=False, host="192.168.1.22")
