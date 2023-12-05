@@ -9,12 +9,11 @@ import os
 from flask import send_file, request 
 from datetime import datetime
 from MessageAnnouncer import MessageAnnouncer
-import Pretalix
-
 from apscheduler.schedulers.background import BackgroundScheduler
 from apscheduler.executors.pool import ThreadPoolExecutor, ProcessPoolExecutor
-
 from flask_caching import Cache
+
+import Pretalix
 
 app = flask.Flask(__name__, static_url_path='/static')
 app.app_context().push()
@@ -30,6 +29,7 @@ sched = BackgroundScheduler(timezone='Africa/Johannesburg', executors=executors)
 app.config["SECRET_KEY"] = "blah"
 app.config["CACHE_TYPE"] = "FileSystemCache"
 app.config["CACHE_DIR"] = "cache/"
+app.config["CACHE_DEFAULT_TIMEOUT"] = 30000
 cache = Cache(app)
 
 cache.set("sponsor_image_idx", 0)
@@ -41,7 +41,7 @@ def format_sse(data: str, event=None) -> str:
         msg = f'event: {event}\n{msg}'
     return msg
 
-### Tasks
+### Tasks ------------------------------------------
 
 # Update scoreboard
 def update_scoreboard_task():
@@ -70,16 +70,11 @@ def show_speaker_task():
 def show_schedule_task():
     displaychedule()
 
-###
+### ---------------------------------------------------
 
 @app.route('/')
 def index():
     return send_file('static/index.html')
-
-@app.route('/pi')
-def pi():
-    return send_file('static/pi.html')
-
 
 @app.route('/scoreboardfetch')
 def scoreboardfetch():    
@@ -113,9 +108,7 @@ def control():
 @app.route('/control/update-scoreboard', methods=['POST'])
 def update_scoreboard():
     message = f'<img src="/scoreboardfetch?{time.time()}" width="100%" height="100%"/>'
-
     msg = format_sse(data=message, event='png-scoreboard')
-
     announcer.announce(msg=msg)
     return {}, 200
 
@@ -124,9 +117,7 @@ def update_scoreboard():
 def message():
     message = ','.join(json.dumps(f'{x}') for x in request.form["message"].splitlines())
     type_msg = f'<div id="element" class="message-overlay"></div><script>new TypeIt("#element", {{strings: [{message}],  speed: 100, html: false, loop: false, lifelike: true, afterComplete: () => setTimeout(function () {{removeAllChildren(document.getElementById("message"))}},10000) }}).go(); </script>'
-
     msg = format_sse(data=type_msg, event='message')
-
     announcer.announce(msg=msg)
     return {}, 200
 
@@ -150,7 +141,6 @@ def testpattern():
 def displayimage():
     image = request.args.get('image')
     timeout = request.args.get('timeout', default=60, type=int)
-
     return displayimage(image, timeout)
 
 def displayimage(imagePath, timeout):
@@ -171,12 +161,6 @@ def displaychedule():
         announcer.announce(msg=msg)
         return {}, 200
 
-
-@app.route('/schedule')
-def schedule():
-   
-    return flask.render_template('schedule.html', schedule = Pretalix.fetch_schedule_data())
-
 # Event Stream for the frontend
 @app.route('/listen', methods=['GET'])
 def listen():
@@ -189,7 +173,7 @@ def listen():
 
     return flask.Response(stream(), mimetype='text/event-stream')
 
-# Fetch screenshot of the scoreboard
+# Scheduled Tasks
 sched.add_job(update_scoreboard_task, 'interval', minutes=1)
 sched.add_job(show_sponsor_task, 'interval', minutes=3)
 sched.add_job(show_speaker_task, 'interval', minutes=2)
@@ -198,4 +182,4 @@ sched.add_job(show_schedule_task, 'interval', minutes=1)
 sched.start()
 
 if __name__ == '__main__':
-    app.run(debug=True, use_reloader=False, host="192.168.1.22")
+    app.run(debug=True, use_reloader=False)

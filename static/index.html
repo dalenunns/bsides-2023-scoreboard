@@ -1,36 +1,29 @@
+<meta http-equiv="refresh" content="1800">
 <script src="https://unpkg.com/htmx.org@1.9.9"></script>
 <script src="https://unpkg.com/htmx.org/dist/ext/sse.js"></script>
-<script src="https://unpkg.com/typeit@8.7.1/dist/index.umd.js"></script>
-
-
-<script>
-    window.setInterval("reloadScoreboardIFrame();", 300000);
-    
-    function reloadScoreboardIFrame() {
-     var frameHolder=document.getElementById('ScoreBoardIframe');
-    frameHolder.src="https://2023challenges.bsidescapetown.co.za/scoreboard?fullscreen=1"
-    }
-</script>
-    
+<script src="https://unpkg.com/typeit@8.7.1/dist/index.umd.js"></script> 
 
 <link rel="stylesheet" media="all" href="/static/style.css" />
+<script>
+    function removeAllChildren(elm) {
+        while (elm.hasChildNodes()) {
+            elm.removeChild(elm.firstChild);
+        }
+    }
+</script>
 <div class="scanlines">
-<!-- <div> -->
     <div class="float">        
-        <!-- <img src="/static/OTV.png"  width="100px"/> -->
     </div>
     
     <div hx-ext="sse" sse-connect="/listen">
-        <div sse-swap="scoreboard">            
-            <iframe id="ScoreBoardIframe" height=100% width=100% src="https://2023challenges.bsidescapetown.co.za/scoreboard?fullscreen=1"></iframe>
+        <div id="scoreboard" sse-swap="png-scoreboard">            
+            <img src="/scoreboardfetch?1" width="100%" height="100%"/>
         </div>
-        <div sse-swap="message">
+        <div id="message" sse-swap="message">
         </div>
-    </div>
-    
-    <!-- IMG -->
-    <!-- IFRAME (youtube) -->
-    <!-- <li id="youtube">
-        <iframe id="youTube" src="https://www.youtube.com/embed/KDnfzfBDedE" allowfullscreen></iframe>
-    </li> -->
+        <div id="display-png" sse-swap="display">
+        </div>
+        <div id="schedule-container" sse-swap="schedule">
+        </div>
+    </div>   
 </div>
